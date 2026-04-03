@@ -2,6 +2,7 @@
 - name: Verify
   hosts: all
   become: true
+
   tasks:
     - name: Check if vim is installed.
       ansible.builtin.command: which vim
