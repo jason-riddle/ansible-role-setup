@@ -18,7 +18,10 @@ in
 
   packages = [
     pkgs.docker
-  ] ++ pythonPackages;
+
+    pkgs.pre-commit
+  ]
+  ++ pythonPackages;
 
   # enterShell = ''
   #   pip3 install ansible molecule molecule-plugins[docker] docker ansible-lint yamllint
