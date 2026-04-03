@@ -11,20 +11,20 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
-        # - jessie     # Debian 08; EOL: 2020-06-30
-        # - stretch    # Debian 09
-        # - buster     # Debian 10
-        # - bullseye   # Debian 11
-        - bookworm     # Debian 12
-        - trixie       # Debian 13
+        # - jessie     # Debian 08; EOL: 2020-06-30 (LTS)
+        # - stretch    # Debian 09; EOL: 2020-07-18 (core) / 2022-07-01 (LTS)
+        # - buster     # Debian 10; EOL: 2022-09-10 (core) / 2024-06-30 (LTS)
+        # - bullseye   # Debian 11; EOL: 2024-08-14 (core) / 2026-08-31 (LTS)
+        - bookworm     # Debian 12; EOL: 2026-06-10
+        - trixie       # Debian 13; EOL: 2028-08-09
     - name: Ubuntu
       versions:
-        # - trusty     # Ubuntu 14.04
-        # - xenial     # Ubuntu 16.04
-        # - bionic     # Ubuntu 18.04
-        # - focal      # Ubuntu 20.04
-        - jammy        # Ubuntu 22.04
-        - noble        # Ubuntu 24.04
+        - trusty       # Ubuntu 14.04; EOL: 2019-04 (standard) / 2024-04 (ESM)
+        - xenial       # Ubuntu 16.04; EOL: 2021-04 (standard) / 2026-04 (ESM)
+        - bionic       # Ubuntu 18.04; EOL: 2023-04 (standard) / 2028-04 (ESM)
+        - focal        # Ubuntu 20.04; EOL: 2025-04 (standard) / 2030-04 (ESM)
+        - jammy        # Ubuntu 22.04; EOL: 2027-04 (standard) / 2032-04 (ESM)
+        - noble        # Ubuntu 24.04; EOL: 2029-04 (standard) / 2034-04 (ESM)
     - name: ArchLinux
       versions:
         - all
