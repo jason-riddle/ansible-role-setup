@@ -1,10 +1,22 @@
-.devenv/
+# --- Environment & Secrets ---
+.env
+.env.local
+.secrets
+
+# --- Development Environments ---
 .devenv.flake.nix
+.devenv/
+
+# --- Configuration & Tooling ---
 .ansible/
 .pre-commit-config.yaml
-*.retry
+
+# --- Python ---
 *.pyc
 __pycache__/
+
+# --- Caches ---
 .cache/
-.env
-.secrets
+
+# --- Ansible ---
+*.retry
