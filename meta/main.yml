@@ -11,7 +11,23 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
-        - bookworm
+        # - jessie     # Debian 08; EOL: 2020-06-30
+        # - stretch    # Debian 09
+        # - buster     # Debian 10
+        # - bullseye   # Debian 11
+        - bookworm     # Debian 12
+        - trixie       # Debian 13
+    - name: Ubuntu
+      versions:
+        # - trusty     # Ubuntu 14.04
+        # - xenial     # Ubuntu 16.04
+        # - bionic     # Ubuntu 18.04
+        # - focal      # Ubuntu 20.04
+        - jammy        # Ubuntu 22.04
+        - noble        # Ubuntu 24.04
+    - name: ArchLinux
+      versions:
+        - all
   galaxy_tags:
     - system
     - setup
