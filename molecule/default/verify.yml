@@ -1,0 +1,29 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  tasks:
+    - name: Check if vim is installed.
+      ansible.builtin.command: which vim
+      changed_when: false
+      register: vim_check
+
+    - name: Assert vim is installed.
+      ansible.builtin.assert:
+        that:
+          - vim_check.rc == 0
+        fail_msg: "vim is not installed"
+        success_msg: "vim is installed"
+
+    - name: Check vim executable exists.
+      ansible.builtin.stat:
+        path: /usr/bin/vim
+      register: vim_binary
+
+    - name: Assert vim binary exists and is executable.
+      ansible.builtin.assert:
+        that:
+          - vim_binary.stat.exists
+          - vim_binary.stat.executable
+        fail_msg: "vim binary does not exist or is not executable"
+        success_msg: "vim binary exists and is executable"

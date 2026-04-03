@@ -1,0 +1,7 @@
+.devenv/
+*.retry
+*.pyc
+__pycache__/
+.cache/
+.env
+.secrets

@@ -1,0 +1,11 @@
+{
+  "packages": [
+    "ansible",
+    "molecule",
+    "molecule-plugins[docker]",
+    "docker",
+    "ansible-lint",
+    "yamllint"
+  ],
+  "python": "python312"
+}

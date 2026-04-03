@@ -1,0 +1,24 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Update apt cache.
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 600
+      changed_when: false
+
+  roles:
+    - role: jason_riddle.setup
+
+  post_tasks:
+    - name: Verify vim is installed.
+      ansible.builtin.command: vim --version
+      changed_when: false
+      register: vim_version
+
+    - name: Print vim version.
+      ansible.builtin.debug:
+        var: vim_version.stdout
