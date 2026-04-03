@@ -4,6 +4,7 @@
   become: true
 
   tasks:
+    # Vim Checks
     - name: Check if vim is installed.
       ansible.builtin.command: which vim
       changed_when: false
