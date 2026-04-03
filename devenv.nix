@@ -3,6 +3,10 @@
 let
   pythonPackages = with pkgs.python313Packages; [
     ansible
+
+    molecule
+    molecule-plugins
+
     # ansible-lint
     # docker
     # molecule
@@ -11,10 +15,42 @@ let
   ];
 in
 {
+  # ============================================================================
+  # ENVIRONMENT CONFIGURATION
+  # ============================================================================
+
+  # https://devenv.sh/integrations/dotenv/
+  dotenv = {
+    enable = true;
+    filename = [
+      ".env"
+      ".env.local"
+    ];
+  };
+
+  # ============================================================================
+  # LANGUAGE & RUNTIME
+  # ============================================================================
+
+  # https://devenv.sh/languages/
+
+  # languages.ansible = {
+  #   enable = false;
+  #   package = pkgs.ansible;
+  # };
+
   languages.python = {
     enable = true;
+    # package = pkgs.python313;
     venv.enable = true;
   };
+
+  # ============================================================================
+  # PACKAGES & TOOLS
+  # ============================================================================
+
+  # https://devenv.sh/packages/
+  # https://search.nixos.org/packages
 
   packages = [
     pkgs.docker
@@ -23,6 +59,12 @@ in
   ]
   ++ pythonPackages;
 
+  # ============================================================================
+  # SCRIPTS
+  # ============================================================================
+
+  # https://devenv.sh/scripts/
+
   # enterShell = ''
   #   pip3 install ansible molecule molecule-plugins[docker] docker ansible-lint yamllint
   # '';
@@ -30,6 +72,12 @@ in
   # enterShell = ''
   #   pip3 install molecule molecule-plugins[docker]
   # '';
+
+  # ============================================================================
+  # GIT HOOKS CONFIGURATION
+  # ============================================================================
+
+  # https://devenv.sh/git-hooks/
 
   git-hooks.hooks = {
     check-yaml = {
@@ -78,5 +126,42 @@ in
     nixfmt-rfc-style = {
       enable = true;
     };
+
+    # ==========================================================================
+    # SECURITY VALIDATION
+    # ==========================================================================
+
+    # Fast regex-based secret detection
+    ripsecrets = {
+      enable = true;
+      excludes = [ "^\\.env$" ];
+    };
+
+    # SOPS encryption enforcement
+    pre-commit-hook-ensure-sops = {
+      enable = true;
+    };
+
+    # Comprehensive secrets scanner (slower but thorough)
+    # trufflehog = {
+    #   enable = true;
+    #   pass_filenames = false;
+    #   stages = [
+    #     "pre-commit"
+    #     "manual"
+    #   ];
+    # };
+
+    # AWS credentials detection
+    detect-aws-credentials = {
+      enable = true;
+      args = [ "--allow-missing-credentials" ];
+    };
+
+    # Private key detection
+    detect-private-keys = {
+      enable = true;
+    };
+
   };
 }
