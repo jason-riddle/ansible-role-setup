@@ -4,6 +4,10 @@
   become: true
 
   pre_tasks:
+    - name: Ping to validate the initial connection
+      ansible.builtin.ping:
+        data: pong
+
     - name: Update apt cache.
       ansible.builtin.apt:
         update_cache: true
