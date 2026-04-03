@@ -1,4 +1,7 @@
 .devenv/
+.devenv.flake.nix
+.ansible/
+.pre-commit-config.yaml
 *.retry
 *.pyc
 __pycache__/
