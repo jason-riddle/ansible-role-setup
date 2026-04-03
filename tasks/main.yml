@@ -1,4 +1,21 @@
 ---
+# - name: Load OS-specific vars.
+#   include_vars: "{{ lookup('first_found', params) }}"
+#   vars:
+#     params:
+#       files:
+#         - '{{ansible_facts.distribution}}.yml'
+#         - '{{ansible_facts.os_family}}.yml'
+#         - main.yml
+#       paths:
+#         - 'vars'
+
+# - include_tasks: setup-Debian.yml
+#   when: ansible_facts.os_family == 'Debian'
+
+# - include_tasks: setup-RedHat.yml
+#   when: ansible_facts.os_family == 'RedHat'
+
 - name: Install packages.
   ansible.builtin.apt:
     name: "{{ packages_to_install }}"
