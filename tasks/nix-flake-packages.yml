@@ -1,0 +1,52 @@
+---
+- name: Get current nix profile state
+  ansible.builtin.command: nix profile list --json
+  register: nix_profile_raw
+  changed_when: false
+
+- name: Debug - Extract keys from elements
+  ansible.builtin.set_fact:
+    installed_elements_keys: "{{ (nix_profile_raw.stdout | from_json).elements.keys() | list }}"
+
+- name: Debug - Extract attrPath values
+  ansible.builtin.set_fact:
+    installed_elements_attrs: "{{ (nix_profile_raw.stdout | from_json).elements.values() | select('mapping') | selectattr('attrPath', 'defined') | map(attribute='attrPath') | map('regex_replace', '^.*\\.', '') | list }}"
+
+- name: Debug - Show all pieces
+  ansible.builtin.debug:
+    msg: |
+      Keys from elements: {{ installed_elements_keys | length }} items
+      {{ installed_elements_keys }}
+
+      AttrPaths (cleaned): {{ installed_elements_attrs | length }} items
+      {{ installed_elements_attrs }}
+
+- name: Parse Installed Elements (final combined)
+  ansible.builtin.set_fact:
+    installed_elements: "{{ installed_elements_keys + installed_elements_attrs }}"
+
+- name: DEBUG - Show currently installed nix elements
+  ansible.builtin.debug:
+    msg: "Currently installed: {{ installed_elements }}"
+
+- name: Install missing nix packages
+  ansible.builtin.shell: "nix profile install {{ item }}"
+  loop: "{{ nix_packages }}"
+  vars:
+    # Extracts 'opencode' from 'github:numtide/llm-agents.nix#opencode'
+    # and 'bar' from 'nixpkgs#bar'
+    short_name: "{{ item.split('#')[-1] }}"
+  when: >
+    item not in installed_elements and
+    short_name not in installed_elements and
+    ("nixpkgs#" + item) not in installed_elements
+  register: install_result
+
+- name: DEBUG - Report installation results
+  ansible.builtin.debug:
+    msg: >-
+      Package: {{ item.item }} |
+      Status: {{ 'Skipped (Already present)' if item.skipped | default(false) else 'Installed/Changed' }}
+  loop: "{{ install_result.results }}"
+  loop_control:
+    label: "{{ item.item }}"

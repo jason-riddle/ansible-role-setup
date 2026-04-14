@@ -1,31 +1,40 @@
 ---
 - name: Verify
-  hosts: all
+  hosts: managed
   become: true
 
   tasks:
-    # Vim Checks
-    - name: Check if vim is installed.
-      ansible.builtin.command: which vim
-      changed_when: false
-      register: vim_check
-
-    - name: Assert vim is installed.
-      ansible.builtin.assert:
-        that:
-          - vim_check.rc == 0
-        fail_msg: "vim is not installed"
-        success_msg: "vim is installed"
-
-    - name: Check vim executable exists.
+    # Flatpak Checks
+    - name: Check flatpak executable exists.
       ansible.builtin.stat:
-        path: /usr/bin/vim
-      register: vim_binary
+        path: /usr/bin/flatpak
+      register: flatpak_binary
 
-    - name: Assert vim binary exists and is executable.
-      ansible.builtin.assert:
-        that:
-          - vim_binary.stat.exists
-          - vim_binary.stat.executable
-        fail_msg: "vim binary does not exist or is not executable"
-        success_msg: "vim binary exists and is executable"
+    # - name: Assert flatpak binary exists and is executable.
+    #   ansible.builtin.assert:
+    #     that:
+    #       - flatpak_binary.stat.exists
+    #       - flatpak_binary.stat.executable
+    #     fail_msg: "flatpak binary does not exist or is not executable"
+    #     success_msg: "flatpak binary exists and is executable"
+
+    # - name: Check if flatpak is available in PATH.
+    #   ansible.builtin.command: which flatpak
+    #   changed_when: false
+    #   register: flatpak_check
+
+    # - name: Assert flatpak is available in PATH.
+    #   ansible.builtin.assert:
+    #     that:
+    #       - flatpak_check.rc == 0
+    #     fail_msg: "flatpak is not available in PATH"
+    #     success_msg: "flatpak is available in PATH"
+
+    # - name: Get flatpak version.
+    #   ansible.builtin.command: flatpak --version
+    #   changed_when: false
+    #   register: flatpak_version
+
+    # - name: Print flatpak version.
+    #   ansible.builtin.debug:
+    #     var: flatpak_version.stdout

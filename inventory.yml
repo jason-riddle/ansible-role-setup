@@ -4,20 +4,26 @@
 all:
   vars:
     ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
   children:
+    # Managed
     managed:
       hosts:
         debian-vm:
           ansible_host: debian-vm.greyhound-little.ts.net
+          ansible_user: jason
           # ansible_user: root
-          ansible_user: ansible
-          ansible_port: 2222
+          ansible_port: 22
 
+    # KVM
+    kvm:
+      hosts:
         tinypilotkvm:
           ansible_host: tinypilotkvm.greyhound-little.ts.net
           ansible_user: ansible
           ansible_port: 22
 
+    # Local
     local:
       hosts:
         localhost:

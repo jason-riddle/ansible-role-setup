@@ -2,14 +2,36 @@
 # MAKEFILE CONFIGURATION
 # ==============================================================================
 
+# Modern Makefile best practices
 .PHONY: help
 .DELETE_ON_ERROR:
 .ONESHELL:
 
+# Shell configuration
 SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
 
+# ==============================================================================
+# PROJECT CONFIGURATION
+# ==============================================================================
+
+# Default goal
 .DEFAULT_GOAL := help
+
+# REF: https://github.com/ansible/ansible/issues/76322
+# REF: https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#running-on-macos-as-a-controller
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY := YES
+
+# If .env file exists, include the file and export all env vars.
+-include .env
+.EXPORT_ALL_VARIABLES:
+
+# If .secrets file exists, include the file and export all env vars.
+-include .secrets
+.EXPORT_ALL_VARIABLES:
+
+# Common CLI arguments for all Ansible commands
+ANSIBLE_CLI_ARGS = --timeout 5
 
 # ==============================================================================
 # CORE TARGETS
@@ -70,6 +92,34 @@ lint-yaml: ## Run yamllint on all YAML files
 	@echo "Running yamllint..."
 	@devenv shell -- bash -c "yamllint ."
 	@echo "✓ YAML lint complete"
+
+# ==============================================================================
+# TROUBLESHOOTING
+# ==============================================================================
+
+ping: ## Test connectivity to all hosts
+	@echo "Testing connectivity to all hosts..."
+	@ansible all --module-name ansible.builtin.ping --args="data=pong" $(ANSIBLE_CLI_ARGS) # --ask-pass
+	@echo "✓ Ping complete"
+
+facts: ## Gather system facts from all hosts
+	@echo "Gathering system facts..."
+	@ansible all --module-name ansible.builtin.setup --tree /tmp/ansible-facts $(ANSIBLE_CLI_ARGS)
+	@echo "✓ Facts complete"
+
+echo: ## Test raw command execution on all hosts
+	@echo "Testing raw command execution..."
+	@ansible --verbose all --module-name ansible.builtin.raw --args="echo hi" $(ANSIBLE_CLI_ARGS)
+	@echo "✓ Raw command complete"
+
+# ==============================================================================
+# OPERATIONS
+# ==============================================================================
+
+apply: main
+main: ## Run main playbook
+	@echo "Running main playbook..."
+	@ansible-playbook ./main.yml $(ANSIBLE_CLI_ARGS) # --ask-become-pass
 
 # ==============================================================================
 # CLEANUP

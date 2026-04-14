@@ -1,3 +1,38 @@
 ---
-setup_packages_to_install:
-  - vim
+ansible_user_name: "ansible"
+
+flatpak_packages: []
+# flatpak_packages:
+#   - org.geany.Geany
+
+#   - org.gimp.GIMP
+
+#   - org.gnome.Calculator
+#   - org.gnome.gedit
+#   - org.gnome.Maps
+#   - org.gnome.Mines
+#   - org.gnome.Shotwell
+#   - org.gnome.Sudoku
+#   - org.gnome.Weather
+
+#   - org.gnucash.GnuCash
+
+#   - org.videolan.VLC
+
+github_keys_url: "https://github.com/jason-riddle.keys"
+
+nix_installer_url: "https://install.determinate.systems/nix"
+
+nix_packages:
+  # Packages
+  - "nixpkgs#agent-browser"
+  - "nixpkgs#deno"
+  - "nixpkgs#jq"
+  - "nixpkgs#llama-cpp"
+  # - "nixpkgs#lmstudio"
+  # - "nixpkgs#ollama"
+  - "nixpkgs#snixembed"
+  - "nixpkgs#wine"
+
+  # Packages
+  - "github:numtide/llm-agents.nix#opencode"

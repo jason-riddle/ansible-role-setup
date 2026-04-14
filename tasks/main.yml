@@ -16,8 +16,9 @@
 # - include_tasks: setup-RedHat.yml
 #   when: ansible_facts.os_family == 'RedHat'
 
-- name: Install packages.
-  ansible.builtin.apt:
-    name: "{{ setup_packages_to_install }}"
-    state: present
-    update_cache: true
+# - include_tasks: users.yml
+
+# - include_tasks: flatpak.yml
+
+# - include_tasks: nix.yml
+- include_tasks: nix-flake-packages.yml

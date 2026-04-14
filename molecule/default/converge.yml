@@ -1,6 +1,6 @@
 ---
 - name: Converge
-  hosts: all
+  hosts: managed
   become: true
 
   pre_tasks:
@@ -29,14 +29,3 @@
 
   roles:
     - role: jason_riddle.setup
-
-  post_tasks:
-    # Vim Checks
-    - name: Verify vim is installed.
-      ansible.builtin.command: vim --version
-      changed_when: false
-      register: vim_version
-
-    - name: Print vim version.
-      ansible.builtin.debug:
-        var: vim_version.stdout

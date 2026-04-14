@@ -1,0 +1,52 @@
+---
+- name: Ensure 'ansible' user exists
+  ansible.builtin.user:
+    name: "{{ ansible_user_name }}"
+    shell: /bin/bash
+    groups: sudo
+    append: true
+    state: present
+
+- name: Ensure /etc/sudoers.d exists
+  ansible.builtin.file:
+    path: "/etc/sudoers.d"
+    state: directory
+    mode: "0755"
+
+- name: Allow passwordless sudo for 'jason'
+  become: true
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/jason"
+    content: "jason ALL=(ALL) NOPASSWD:ALL\n"
+    owner: root
+    group: root
+    mode: "0440"
+    validate: "visudo -cf %s"
+
+- name: Allow passwordless sudo for 'ansible'
+  become: true
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/{{ ansible_user_name }}"
+    content: "{{ ansible_user_name }} ALL=(ALL) NOPASSWD:ALL\n"
+    owner: root
+    group: root
+    mode: "0440"
+    validate: "visudo -cf %s"
+
+- name: Fetch authorized keys from GitHub
+  ansible.builtin.uri:
+    url: "{{ github_keys_url }}"
+    return_content: true
+    status_code: 200
+    timeout: 30
+  register: github_keys
+  failed_when: >-
+    github_keys.status != 200 or
+    github_keys.content | trim | length == 0
+
+- name: Install authorized keys for 'ansible' from GitHub
+  become: true
+  ansible.posix.authorized_key:
+    user: "{{ ansible_user_name }}"
+    state: present
+    key: "{{ github_keys.content }}"

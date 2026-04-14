@@ -25,9 +25,10 @@ galaxy_info:
         - focal        # Ubuntu 20.04; EOL: 2025-04 (standard) / 2030-04 (ESM)
         - jammy        # Ubuntu 22.04; EOL: 2027-04 (standard) / 2032-04 (ESM)
         - noble        # Ubuntu 24.04; EOL: 2029-04 (standard) / 2034-04 (ESM)
-    - name: ArchLinux
+    - name: Fedora
       versions:
         - all
   galaxy_tags:
-    - system
+    - server
     - setup
+    - system

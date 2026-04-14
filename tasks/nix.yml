@@ -1,0 +1,83 @@
+---
+# - name: Ensure required packages are installed
+#   ansible.builtin.package:
+#     name:
+#       - sudo
+#       - curl
+#       - xz-utils
+#     state: present
+
+- name: Check if Nix is already installed and working
+  ansible.builtin.command: /nix/var/nix/profiles/default/bin/nix --version
+  register: nix_check
+  failed_when: false
+  changed_when: false
+
+- name: Set nix_installed fact based on working installation
+  ansible.builtin.set_fact:
+    nix_installed: "{{ nix_check.rc == 0 }}"
+
+- name: Check if Nix installation was attempted
+  ansible.builtin.stat:
+    path: "/var/lib/nix-install-attempted"
+  register: nix_attempt_marker
+
+- name: Download Determinate Nix installer script
+  ansible.builtin.get_url:
+    url: "{{ nix_installer_url }}"
+    dest: "/tmp/determinate-nix-installer.sh"
+    mode: "0755"
+  when: not nix_installed and not nix_attempt_marker.stat.exists
+
+- name: Install Determinate Nix
+  ansible.builtin.command: >-
+    /tmp/determinate-nix-installer.sh install --determinate --no-confirm
+  register: nix_install
+  changed_when: nix_install.rc == 0
+  failed_when: false
+  when: not nix_installed and not nix_attempt_marker.stat.exists
+
+- name: Mark Nix installation as attempted
+  ansible.builtin.file:
+    path: "/var/lib/nix-install-attempted"
+    state: touch
+    mode: "0644"
+  when: not nix_installed and not nix_attempt_marker.stat.exists
+
+- name: Clean up installer script
+  ansible.builtin.file:
+    path: "/tmp/determinate-nix-installer.sh"
+    state: absent
+  when: not nix_installed and not nix_attempt_marker.stat.exists
+
+- name: Check if systemd is available
+  ansible.builtin.stat:
+    path: /run/systemd/system
+  register: systemd_available
+
+- name: Check if Determinate Nixd socket exists
+  ansible.builtin.stat:
+    path: /etc/systemd/system/determinate-nixd.socket
+  register: nixd_socket
+  when:
+    - nix_installed
+    - systemd_available.stat.exists
+
+- name: Ensure Determinate Nixd socket is enabled
+  ansible.builtin.systemd:
+    name: determinate-nixd.socket
+    enabled: true
+    state: started
+    daemon_reload: true
+  when:
+    - nix_installed
+    - systemd_available.stat.exists
+    - nixd_socket.stat is defined
+    - nixd_socket.stat.exists
+
+- name: Verify Nix installation
+  ansible.builtin.command: /nix/var/nix/profiles/default/bin/nix --version
+  register: nix_version
+  changed_when: false
+  failed_when: nix_version.rc != 0
+  when: nix_installed

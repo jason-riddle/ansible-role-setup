@@ -1,0 +1,19 @@
+---
+- name: Main
+  hosts: managed
+  gather_facts: true
+  # become: true
+
+  vars_files:
+    - defaults/main.yml
+
+  pre_tasks:
+    - name: Ping to validate the initial connection
+      ansible.builtin.ping:
+        data: pong
+
+  tasks:
+    - include_tasks: tasks/main.yml
+
+- name: Run verify.
+  ansible.builtin.import_playbook: ./molecule/default/verify.yml

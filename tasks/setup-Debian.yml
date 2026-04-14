@@ -1,7 +1,37 @@
 ---
-- name: Ensure dependencies are installed.
+- name: Ensure dependencies are installed (Apt).
   ansible.builtin.apt:
     name:
       - ca-certificates
-      - python3-debian
+      - curl
     state: present
+
+- name: Ensure flatpak is installed (Apt).
+  ansible.builtin.apt:
+    name:
+      - flatpak
+    state: present
+
+- name: Check if /usr/bin/gnome-session exists
+  ansible.builtin.stat:
+    path: /usr/bin/gnome-session
+  register: gnome_session_binary
+
+- name: Check if /usr/share/gnome exists
+  ansible.builtin.stat:
+    path: /usr/share/gnome
+  register: gnome_share_dir
+
+- name: Ensure gnome-software-plugin-flatpak is installed (Apt).
+  ansible.builtin.apt:
+    name:
+      - gnome-software-plugin-flatpak
+    state: present
+  when: gnome_session_binary.stat.exists or gnome_share_dir.stat.exists
+
+- name: Ensure gnome-shell-extension-appindicator is installed (Apt).
+  ansible.builtin.apt:
+    name:
+      - gnome-shell-extension-appindicator
+    state: present
+  when: gnome_session_binary.stat.exists or gnome_share_dir.stat.exists
