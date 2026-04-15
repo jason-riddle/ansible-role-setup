@@ -20,6 +20,8 @@ flatpak_packages: []
 #   - org.videolan.VLC
 
 #   - io.podman_desktop.PodmanDesktop
+#   - org.bleachbit.BleachBit
+#   - io.github.kolunmi.Bazaar
 
 github_keys_url: "https://github.com/jason-riddle.keys"
 
