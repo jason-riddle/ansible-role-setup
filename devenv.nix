@@ -118,8 +118,8 @@ in
       enable = true;
     };
     yamlfmt = {
-      enable = true;
-      options.settings.lint-only = false;
+      enable = false;
+      # settings.lint-only = false;
     };
     yamllint = {
       enable = true;
