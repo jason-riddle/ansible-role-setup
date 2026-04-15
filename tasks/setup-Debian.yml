@@ -35,3 +35,17 @@
       - gnome-shell-extension-appindicator
     state: present
   when: gnome_session_binary.stat.exists or gnome_share_dir.stat.exists
+
+- name: Ensure gnome-shell-extension-desktop-icons is installed (Apt).
+  ansible.builtin.apt:
+    name:
+      - gnome-shell-extension-desktop-icons
+    state: present
+  when: gnome_session_binary.stat.exists or gnome_share_dir.stat.exists
+
+- name: Ensure gnome-tweaks is installed (Apt).
+  ansible.builtin.apt:
+    name:
+      - gnome-tweaks
+    state: present
+  when: gnome_session_binary.stat.exists or gnome_share_dir.stat.exists

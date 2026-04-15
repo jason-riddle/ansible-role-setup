@@ -1,0 +1,14 @@
+---
+- name: "Ensure /tmp/var/backups/root@{{ ansible_hostname }} exists."
+  ansible.builtin.file:
+    path: "/tmp/var/backups/root@{{ ansible_hostname }}"
+    state: directory
+    mode: "0755"
+
+- name: Create rsnapshot config from template
+  ansible.builtin.template:
+    src: templates/rsnapshot.conf.j2
+    dest: /tmp/rsnapshot.conf.j2
+    # owner: root
+    # group: root
+    mode: '0644'

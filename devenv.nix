@@ -117,6 +117,10 @@ in
     trim-trailing-whitespace = {
       enable = true;
     };
+    yamlfmt = {
+      enable = true;
+      options.settings.lint-only = false;
+    };
     yamllint = {
       enable = true;
     };

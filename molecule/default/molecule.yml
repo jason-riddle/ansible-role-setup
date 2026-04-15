@@ -21,15 +21,13 @@ platforms:
     cgroupns_mode: host
 provisioner:
   name: ansible
-  playbooks:
-    # prepare: prepare.yml
-    converge: converge.yml
-    verify: verify.yml
   inventory:
     host_vars:
       instance:
         tailscale_up_no_log: false
   playbooks:
+    # prepare: prepare.yml
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
+    verify: verify.yml
 # verifier:
 #   name: ansible

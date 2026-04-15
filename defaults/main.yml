@@ -19,6 +19,8 @@ flatpak_packages: []
 
 #   - org.videolan.VLC
 
+#   - io.podman_desktop.PodmanDesktop
+
 github_keys_url: "https://github.com/jason-riddle.keys"
 
 nix_installer_url: "https://install.determinate.systems/nix"
@@ -27,12 +29,22 @@ nix_packages:
   # Packages
   - "nixpkgs#agent-browser"
   - "nixpkgs#deno"
+  - "nixpkgs#devenv"
   - "nixpkgs#jq"
+  - "nixpkgs#kubectl"
   - "nixpkgs#llama-cpp"
   # - "nixpkgs#lmstudio"
-  # - "nixpkgs#ollama"
+  - "nixpkgs#minikube"
+  - "nixpkgs#ollama"
+  - "nixpkgs#podman"
+  - "nixpkgs#prometheus-node-exporter"
+  - "nixpkgs#rclone"
+  - "nixpkgs#rsnapshot"
+  - "nixpkgs#rsync"
+  - "nixpkgs#runitor"
   - "nixpkgs#snixembed"
+  - "nixpkgs#sops"
   - "nixpkgs#wine"
 
   # Packages
-  - "github:numtide/llm-agents.nix#opencode"
+  # - "github:numtide/llm-agents.nix#opencode"
