@@ -1,6 +1,10 @@
 ---
 ansible_user_name: "ansible"
 
+brew_packages:
+  # Packages
+  - "android-platform-tools"
+
 flatpak_packages: []
 # flatpak_packages:
 #   - org.geany.Geany
